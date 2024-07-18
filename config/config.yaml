@@ -1,0 +1,10 @@
+postgres:
+  user: "chat"
+  name: "chat"
+  password: "secret"
+  host: "localhost"
+  port: 54322
+
+grpc:
+  host: "localhost"
+  port: 4300
