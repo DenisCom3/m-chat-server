@@ -33,3 +33,7 @@ generate-chat-api:
 	--go-grpc_out=pkg/chat_v1 --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	api/chat_v1/chat.proto
+
+
+docker-up:
+	docker-compose -f docker-compose.yaml -p m-chat-server up -d 

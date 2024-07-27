@@ -1,16 +1,25 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 
-	"github.com/DenisCom3/m-chat-server/internal/config"
+	"github.com/DenisCom3/m-chat-server/internal/app"
 )
 
 func main() {
-	err := config.MustLoad()
+	
+	ctx := context.Background()
+
+	a, err := app.New(ctx)
+
 	if err != nil {
-		log.Fatalf("failed to init config. %v", err)
+		log.Fatalf("failed to init app: %s", err.Error())
 	}
-	fmt.Println(config.GetPostgres().Dsn())
+
+	if err := a.Run(); err != nil {
+		log.Fatalf("failed to run app: %s", err.Error())
+	}
+			
 }
+
