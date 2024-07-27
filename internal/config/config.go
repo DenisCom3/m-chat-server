@@ -2,23 +2,27 @@ package config
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/DenisCom3/m-chat-server/internal/config/auth"
 	"github.com/DenisCom3/m-chat-server/internal/config/grpc"
 	"github.com/DenisCom3/m-chat-server/internal/config/postgres"
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
-	"os"
 )
 
-var cfg *Config
+var cfg *config
 
 type YamlConfig struct {
 	Postgres postgres.Postgres `yaml:"postgres" env-required:"true"`
 	Grpc     grpc.Grpc         `yaml:"grpc" env-required:"true"`
+	Auth     auth.Auth        `yaml:"auth" env-required:"true"`
 }
 
-type Config struct {
+type config struct {
 	postgres Postgres
 	grpc     Grpc
+	auth     Auth
 }
 
 type Postgres interface {
@@ -26,6 +30,10 @@ type Postgres interface {
 }
 
 type Grpc interface {
+	Address() string
+}
+
+type Auth interface {
 	Address() string
 }
 
@@ -41,6 +49,13 @@ func GetGrpc() Grpc {
 		panic("config not initialized")
 	}
 	return cfg.grpc
+}
+
+func GetAuth() Auth {
+	if cfg == nil {
+		panic("config not initialized")
+	}
+	return cfg.auth
 }
 func MustLoad() error {
 
@@ -70,9 +85,10 @@ func MustLoad() error {
 		return fmt.Errorf("cannot read config: %s", err)
 	}
 
-	cfg = &Config{
+	cfg = &config{
 		postgres: yaml.Postgres,
 		grpc:     yaml.Grpc,
+		auth:     yaml.Auth,
 	}
 	return nil
 }

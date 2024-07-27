@@ -8,3 +8,8 @@ postgres:
 grpc:
   host: "localhost"
   port: 4300
+
+
+auth:
+  host: "localhost"
+  port: 4200
